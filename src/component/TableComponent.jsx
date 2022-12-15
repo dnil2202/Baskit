@@ -4,6 +4,7 @@ import { deleteAction } from '../action/action';
 import ModalEdit from './ModalEdit';
 
 const TableComponent = () => {
+    const [editData, setEditData] = useState('')
 
     const dispatch =useDispatch()
 
@@ -13,8 +14,6 @@ const TableComponent = () => {
         }
     })
 
-    const [id, setId]=useState('')
-
     const onDelete = (event)=>{
         let index = parseInt(event.target.value)
         let deletedItem = data[index]
@@ -22,9 +21,9 @@ const TableComponent = () => {
         dispatch(deleteAction(newData))
     }
 
-    const findId = (e)=>{
-        let index = parseInt(e.target.value)
-        console.log(index)
+    const findId = (val)=>{
+        console.log(val)
+        setEditData(val)
     }
 
 
@@ -39,8 +38,8 @@ const TableComponent = () => {
                             <td className='border-b-2 p-4'>{v.description}</td>
                             <td className='border-b-2 p-4'>{v.status}</td>
                             <td className='border-b-2 p-4 md:flex'>
-                                <button onClick={findId} value={i}>
-                                    <ModalEdit/>
+                                <button onClick={()=>{findId(v)}}>
+                                    <ModalEdit dataEdit={editData}/>
                                 </button>
                                 <button className='bg-red-400 px-3 rounded-lg my-1 md:my-0 md:mx-2' value={i} onClick={onDelete}>Delete</button>
                                 <button className='bg-green-400 px-3 rounded-lg'>Done</button>
@@ -68,7 +67,6 @@ const TableComponent = () => {
                     {printData()}
                 </tbody>
             </table>
-            
     </div>
   )
 }

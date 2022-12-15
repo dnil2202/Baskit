@@ -1,14 +1,13 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal,Label, TextInput, Textarea} from 'flowbite-react';
 import { AiOutlineLoading3Quarters  } from 'react-icons/ai';
 import { addAction } from '../action/action';
 
 
-const ModalEdit = (props) => {
+const ModalEdit = ({dataEdit}) => {
 
-    const id =props.id
-    console.log(id)
+    console.log(dataEdit)
 
     const dispatch = useDispatch()
 
@@ -50,12 +49,14 @@ const ModalEdit = (props) => {
   return (
     <div>
     <React.Fragment>
-<button onClick={()=>setOpen(!open)} className='bg-yellow-400 px-3 rounded-lg'>Edit</button>
+<button onClick={()=>{setOpen(!open);setInput(dataEdit)}} className='bg-yellow-400 px-3 rounded-lg'>Edit</button>
 <Modal
 show={open}
 size='md'
 popup={true}
-onClose={()=>setOpen(!open)}
+onClose={()=>{setOpen(!open);setInput({ tittle:'',
+description:'',
+status:'todo'})}}
 
 >
 <Modal.Header/>
