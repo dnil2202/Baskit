@@ -12,7 +12,7 @@ export const todoReducer=(state= TASK, action)=>{
         case "DELETE_SUCCESS":
             return [...action.payload]
         case "EDIT_SUCCESS":
-            return {...state,  ...action.payload}
+            return [...action.payload]
         default:
             return state;
     }

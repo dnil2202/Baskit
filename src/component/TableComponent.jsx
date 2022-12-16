@@ -1,18 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteAction } from '../action/action';
-import ModalEdit from './ModalEdit';
+import ModalForm from './Modal';
+import { RxCross1  } from 'react-icons/rx';
 
 const TableComponent = () => {
-    const [editData, setEditData] = useState('')
 
     const dispatch =useDispatch()
+
+    const[modalFormOn,setModalFormOn]=useState(false)
+
+    const [idEdit, setIdEdit]= useState('')
 
     const {data} =useSelector((state)=>{
         return {
             data: state.todoReducer
         }
     })
+
+    useEffect(()=>{
+        setModalFormOn(false)
+    },[data])
 
     const onDelete = (event)=>{
         let index = parseInt(event.target.value)
@@ -21,12 +29,10 @@ const TableComponent = () => {
         dispatch(deleteAction(newData))
     }
 
-    const findId = (val)=>{
-        console.log(val)
-        setEditData(val)
+    const openModalEdit = (e) =>{
+        setModalFormOn(!modalFormOn)
+        setIdEdit(e.target.value)
     }
-
-
 
     const printData = ()=>{
         if(data){
@@ -38,21 +44,19 @@ const TableComponent = () => {
                             <td className='border-b-2 p-4'>{v.description}</td>
                             <td className='border-b-2 p-4'>{v.status}</td>
                             <td className='border-b-2 p-4 md:flex'>
-                                <button onClick={()=>{findId(v)}}>
-                                    <ModalEdit dataEdit={editData}/>
+                                <button className='bg-yellow-400 px-3 rounded-lg' onClick={openModalEdit} value={i} >
+                                    edit
                                 </button>
                                 <button className='bg-red-400 px-3 rounded-lg my-1 md:my-0 md:mx-2' value={i} onClick={onDelete}>Delete</button>
                                 <button className='bg-green-400 px-3 rounded-lg'>Done</button>
                             </td>
                         </tr>
-                    
                 )
-    
             })
         }
     }
   return (
-    <div className='py-5'>
+    <div className='py-5 relative'>
             <table className='w-full'>
                 <thead>
                     <tr>
@@ -67,6 +71,18 @@ const TableComponent = () => {
                     {printData()}
                 </tbody>
             </table>
+            {
+                modalFormOn &&
+                <div className='absolute top-3 left-[600px] '>
+                    <div className='flex justify-end'>
+                    <button className='absolute' onClick={()=>setModalFormOn(!modalFormOn)}><RxCross1 size={20}/></button>
+                </div>
+                    <ModalForm 
+                    setModalOn={modalFormOn}
+                    id={idEdit}
+                    />
+                </div>
+            }
     </div>
   )
 }
